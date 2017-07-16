@@ -13,8 +13,6 @@ compile 'illiyin.mhandharbeni.httpcall:httpcalllibrary:0.0.1'
 | ------ | ------ |
 | Get | N/A |
 | Post | N/A |
-| Update | N/A |
-| Delete | N/A |
 
 ### Sample
 init in your activity
