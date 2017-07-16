@@ -1,5 +1,4 @@
-# HttpCall
-
+# CRUD Realm Android
 ### Installation
 Add this to your build.gradle
 
@@ -12,8 +11,10 @@ compile 'illiyin.mhandharbeni.httpcall:httpcalllibrary:0.0.1'
 
 | Function | Parameter |
 | ------ | ------ |
-| Get | String |
-| Post | String, RequestBody |
+| Get | N/A |
+| Post | N/A |
+| Update | N/A |
+| Delete | N/A |
 
 ### Sample
 init in your activity
@@ -40,4 +41,18 @@ String response = androidCall.post(url, requestBody);
 
 /*JSON Parsing*/
 JSONObject jsonObject = new JSONObject(response);
+```
+
+
+### Upload File
+```sh
+File sourceFile = new File("IMAGE_PATH");
+final MediaType MEDIA_TYPE = "IMAGE_PATH".endsWith("png") ?
+    MediaType.parse("image/png") : MediaType.parse("image/jpeg");
+RequestBody requestBody = new MultipartBody.Builder()
+    .setType(MultipartBody.FORM)
+    .addFormDataPart("gambar", "IMAGE_NAME", RequestBody.create(MEDIA_TYPE, sourceFile))
+    .build();
+String url = "";
+String response = androidCall.post(url, requestBody);
 ```
