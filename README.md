@@ -11,8 +11,8 @@ compile 'illiyin.mhandharbeni.httpcall:httpcalllibrary:0.0.1'
 
 | Function | Parameter |
 | ------ | ------ |
-| Get | N/A |
-| Post | N/A |
+| Get | String |
+| Post | String, RequestBody |
 
 ### Sample
 init in your activity
