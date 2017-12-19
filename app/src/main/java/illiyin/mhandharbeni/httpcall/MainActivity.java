@@ -1,5 +1,6 @@
 package illiyin.mhandharbeni.httpcall;
 
+import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -17,23 +18,26 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
         /*initialization*/
         androidCall = new AndroidCall(this);
         setContentView(R.layout.activity_main);
         sampleGet();
-        samplePost();
+//        samplePost();
     }
 
     public void sampleGet(){
         try {
-            String url = "";
+            String url = "https://api.chucknorris.io/jokes/random";
             String response = androidCall.get(url);
 
             /*JSON Parsing*/
             JSONObject jsonObject = new JSONObject(response);
 
             /*DO IT YOURSELF*/
-        } catch (IOException | JSONException e) {
+        } catch (IOException | JSONException | NullPointerException e) {
             e.printStackTrace();
         }
     }
@@ -41,9 +45,9 @@ public class MainActivity extends AppCompatActivity {
         try {
             RequestBody requestBody = new MultipartBody.Builder()
                     .setType(MultipartBody.FORM)
-                    .addFormDataPart("access_token", "YOUR-PARAMETER")
+                    .addFormDataPart("NAMA PARAMETER", "ISI PARAMETER")
                     .build();
-            String url = "";
+            String url = "https://api.chucknorris.io/jokes/random";
             String response = androidCall.post(url, requestBody);
 
             /*JSON Parsing*/
