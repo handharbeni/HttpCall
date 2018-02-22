@@ -2,9 +2,14 @@ package illiyin.mhandharbeni.httpcalllibrary;
 
 import android.content.Context;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Cache;
+import okhttp3.CacheControl;
+import okhttp3.Headers;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -15,6 +20,8 @@ import okhttp3.Response;
  */
 
 public class AndroidCall {
+    File httpCacheDirecotory;
+    Cache cache;
     Context mContext;
     OkHttpClient client;
     public AndroidCall(Context context) {
@@ -35,12 +42,17 @@ public class AndroidCall {
         initClient(connectTimeout, writeTimeout, readTimeout);
     }
     private void initClient(int connectTimeout, int writeTimeout, int readTimeout){
+//        httpCacheDirecotory = new File(this.mContext.getCacheDir(), "CACHE-OKHTTP");
+//        cache = new Cache(httpCacheDirecotory, 10 * 1024 * 1024);
         client = new OkHttpClient.Builder()
+                .addNetworkInterceptor(provideCacheInterceptor())
+//                .cache(cache)
                 .connectTimeout(connectTimeout, TimeUnit.SECONDS)
                 .readTimeout(readTimeout, TimeUnit.SECONDS)
-                .writeTimeout(writeTimeout, TimeUnit.SECONDS).build();
+                .writeTimeout(writeTimeout, TimeUnit.SECONDS)
+                .build();
     }
-    public String get(String url) throws IOException {
+    public String get(String url) throws Exception {
         String returns = null;
         Request request = new Request.Builder()
                 .url(url)
@@ -54,7 +66,7 @@ public class AndroidCall {
         }
         return returns;
     }
-    public String post(String url, RequestBody requestBody) throws IOException {
+    public String post(String url, RequestBody requestBody) throws Exception {
         String returns  = null;
         Request request = new Request.Builder()
                 .url(url)
@@ -67,5 +79,20 @@ public class AndroidCall {
             returns = null;
         }
         return returns;
+    }
+    private Interceptor provideCacheInterceptor () {
+        return new Interceptor() {
+            @Override
+            public Response intercept (Chain chain) throws IOException {
+                Response response = chain.proceed( chain.request() );
+                CacheControl cacheControl = new CacheControl.Builder()
+                        .maxAge( 2, TimeUnit.MINUTES )
+                        .build();
+
+                return response.newBuilder()
+                        .header("Connection", "close")
+                        .build();
+            }
+        };
     }
 }
